@@ -39,22 +39,22 @@ struct _FlashbulbCardClass
 	GObjectClass parent_class;
 
 	/* Virtual methods */
-	void (* get_question)   (const FlashbulbCard *self,
-	                         GValue *value);
-	void (* get_answer)     (const FlashbulbCard *self,
-	                         GValue *value);
-	void (* set_question)   (FlashbulbCard *self,
-	                         const GValue *value);
-	void (* set_answer)     (FlashbulbCard *self,
-	                         const GValue *value);
-	gboolean (* is_correct) (FlashbulbCard *self,
-	                         const gchar *answer);
-	gboolean (* test)       (FlashbulbCard *self,
-	                         const gchar *answer);
-	gboolean (* succeed)    (FlashbulbCard *self,
-	                         const gchar *answer);
-	gboolean (* fail)       (FlashbulbCard *self,
-	                         const gchar *answer);
+	void     (* get_question)   (const FlashbulbCard *self,
+	                             GValue              *value);
+	void     (* get_answer)     (const FlashbulbCard *self,
+	                             GValue              *value);
+	void     (* set_question)   (FlashbulbCard       *self,
+	                             const GValue        *value);
+	void     (* set_answer)     (FlashbulbCard       *self,
+	                             const GValue        *value);
+	gboolean (* is_correct)     (const FlashbulbCard *self,
+	                             const gchar         *answer);
+	gboolean (* test)           (FlashbulbCard       *self,
+	                             const gchar         *answer);
+	gboolean (* succeed)        (FlashbulbCard       *self,
+	                             const gchar         *answer);
+	gboolean (* fail)           (FlashbulbCard       *self,
+	                             const gchar         *answer);
 };
 
 struct _FlashbulbCard
@@ -71,7 +71,7 @@ void     flashbulb_card_set_question (FlashbulbCard       *self,
                                       const GValue        *value);
 void     flashbulb_card_set_answer   (FlashbulbCard       *self,
                                       const GValue        *value);
-gboolean flashbulb_card_is_correct   (FlashbulbCard       *self,
+gboolean flashbulb_card_is_correct   (const FlashbulbCard *self,
                                       const gchar         *answer) G_GNUC_CONST;
 gboolean flashbulb_card_test         (FlashbulbCard       *self,
                                       const gchar         *answer);

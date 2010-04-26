@@ -22,13 +22,7 @@ flashbulb_SOURCES = \
 	callbacks.h \
 	main.c     \
 	flashbulb-card.h     \
-	flashbulb-card.c     \
-	flashbulb-card-private.h     \
-	flashbulb-card-private.c     \
-	some-class.h     \
-	some-class.c     \
-	flashbulb-some-class.h     \
-	flashbulb-some-class.c
+	flashbulb-card.c
 
 flashbulb_LDFLAGS = \
 	-Wl,--export-dynamic

@@ -49,8 +49,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(uidir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_flashbulb_OBJECTS = callbacks.$(OBJEXT) main.$(OBJEXT) \
-	flashbulb-card.$(OBJEXT) flashbulb-card-private.$(OBJEXT) \
-	some-class.$(OBJEXT) flashbulb-some-class.$(OBJEXT)
+	flashbulb-card.$(OBJEXT)
 flashbulb_OBJECTS = $(am_flashbulb_OBJECTS)
 am__DEPENDENCIES_1 =
 flashbulb_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -252,13 +251,7 @@ flashbulb_SOURCES = \
 	callbacks.h \
 	main.c     \
 	flashbulb-card.h     \
-	flashbulb-card.c     \
-	flashbulb-card-private.h     \
-	flashbulb-card-private.c     \
-	some-class.h     \
-	some-class.c     \
-	flashbulb-some-class.h     \
-	flashbulb-some-class.c
+	flashbulb-card.c
 
 flashbulb_LDFLAGS = \
 	-Wl,--export-dynamic
@@ -353,11 +346,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/callbacks.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/flashbulb-card-private.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/flashbulb-card.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/flashbulb-some-class.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/some-class.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

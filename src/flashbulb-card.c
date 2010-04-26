@@ -2,17 +2,17 @@
 /*
  * flashbulb
  * Copyright (C) Nicholas Coltharp 2010 <ngc1@rice.edu>
- * 
+ *
  * flashbulb is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * flashbulb is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,21 +41,26 @@ enum {
 G_DEFINE_TYPE (FlashbulbCard, flashbulb_card, G_TYPE_OBJECT);
 
 static void
-flashbulb_card_init (FlashbulbCard *object)
-{
-	/* TODO: Add initialization code here */
-}
+flashbulb_card_init (FlashbulbCard *self) {}
 
 static void
 flashbulb_card_finalize (GObject *object)
 {
-	/* TODO: Add deinitalization code here */
+	FlashbulbCardPrivate *priv;
+
+	priv = FLASHBULB_CARD_PRIVATE (FLASHBULB_CARD (object));
+
+	g_free (priv->question);
+	g_free (priv->answer);
 
 	G_OBJECT_CLASS (flashbulb_card_parent_class)->finalize (object);
 }
 
 static void
-flashbulb_card_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
+flashbulb_card_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
 {
 	FlashbulbCard *self;
 
@@ -75,7 +80,10 @@ flashbulb_card_set_property (GObject *object, guint prop_id, const GValue *value
 }
 
 static void
-flashbulb_card_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
+flashbulb_card_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
 {
 	FlashbulbCard *self;
 
@@ -103,6 +111,7 @@ flashbulb_card_class_init (FlashbulbCardClass *klass)
 	g_type_class_add_private (klass, sizeof (FlashbulbCardPrivate));
 
 	object_class->finalize = flashbulb_card_finalize;
+
 	object_class->set_property = flashbulb_card_set_property;
 	object_class->get_property = flashbulb_card_get_property;
 
@@ -115,21 +124,25 @@ flashbulb_card_class_init (FlashbulbCardClass *klass)
 	klass->succeed = flashbulb_card_succeed;
 	klass->fail = flashbulb_card_fail;
 
-	g_object_class_install_property (object_class,
-	                                 PROP_QUESTION,
-	                                 g_param_spec_string ("question",
-	                                                      "q",
-	                                                      "The card's question.",
-	                                                      "",
-	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	g_object_class_install_property (
+		object_class, PROP_QUESTION,
+		g_param_spec_string ("question",
+		                     "q",
+		                     "The card's question.",
+		                     "",
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME
+		                     | G_PARAM_STATIC_NICK
+		                     | G_PARAM_STATIC_BLURB));
 
-	g_object_class_install_property (object_class,
-	                                 PROP_ANSWER,
-	                                 g_param_spec_string ("answer",
-	                                                      "a",
-	                                                      "The answer to the card's question.",
-	                                                      "",
-	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	g_object_class_install_property (
+		object_class, PROP_ANSWER,
+		g_param_spec_string ("answer",
+		                     "a",
+		                     "The answer to the card's question.",
+		                     "",
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME
+		                     | G_PARAM_STATIC_NICK
+		                     | G_PARAM_STATIC_BLURB));
 }
 
 void
@@ -165,12 +178,14 @@ flashbulb_card_set_answer (FlashbulbCard *self, const GValue *value)
 }
 
 gboolean
-flashbulb_card_is_correct (FlashbulbCard *self, const gchar *answer)
+flashbulb_card_is_correct (const FlashbulbCard *self, const gchar *answer)
 {
-	gchar *self_answer;
+	gchar   *self_answer;
 	gboolean ret;
 
-	g_object_get (self, "answer", &self_answer, NULL);
+	/* NOTE: this casts away the const, but get_answer() is declared
+	   const anyway */
+	g_object_get ((gpointer) self, "answer", &self_answer, NULL);
 	ret = !g_strcmp0 (answer, self_answer);
 	g_free (self_answer);
 

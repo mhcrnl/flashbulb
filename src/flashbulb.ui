@@ -244,66 +244,96 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVPaned" id="qa_vpaned">
+              <object class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkVBox" id="question_vbox">
+                  <object class="GtkVPaned" id="qa_vpaned">
                     <property name="visible">True</property>
+                    <property name="can_focus">True</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="question_label">
+                      <object class="GtkVBox" id="question_vbox">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Question:</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="question_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Question:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkTextView" id="question_text_view">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="position">0</property>
+                        <property name="resize">False</property>
+                        <property name="shrink">True</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkTextView" id="question_text_view">
+                      <object class="GtkVBox" id="answer_vbox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="answer_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Answer:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkTextView" id="answer_text_view">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="position">1</property>
+                        <property name="resize">True</property>
+                        <property name="shrink">True</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="resize">False</property>
-                    <property name="shrink">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkVBox" id="answer_vbox">
+                  <object class="GtkToolbar" id="answer_toolbar">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="answer_label">
+                      <object class="GtkToolButton" id="answer_ok_button">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Answer:</property>
+                        <property name="related_action">action1</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-ok</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkTextView" id="answer_text_view">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
+                        <property name="homogeneous">True</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="resize">True</property>
-                    <property name="shrink">True</property>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -330,4 +360,5 @@
       </object>
     </child>
   </object>
+  <object class="GtkAction" id="action1"/>
 </interface>

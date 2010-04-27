@@ -1,11 +1,8 @@
-Flashbulb can be built with three commands:
+flashbulb can be built with three commands:
 
 $ autoreconf -i
 $ ./configure
 $ make
 
 To build in one command, run:
-autoreconf -i -m
-
-
-
+$ autoreconf -i -m

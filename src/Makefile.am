@@ -22,7 +22,7 @@ flashbulb_SOURCES = \
 	callbacks.h \
 	main.c     \
 	flashbulb-card.h     \
-	flashbulb-card.c
+	flashbulb-card.c     
 
 flashbulb_LDFLAGS = \
 	-Wl,--export-dynamic

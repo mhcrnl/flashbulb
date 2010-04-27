@@ -22,6 +22,14 @@
 #include <glib.h>
 #include <glib-object.h>
 
+typedef struct _FlashbulbCardXmlParseData FlashbulbCardXmlParseData;
+struct _FlashbulbCardXmlParseData
+{
+	FlashbulbCard *card;
+	gboolean       question_encountered;
+	gboolean       answer_encountered;
+};
+
 typedef struct _FlashbulbCardPrivate FlashbulbCardPrivate;
 struct _FlashbulbCardPrivate
 {
@@ -212,4 +220,68 @@ gboolean
 flashbulb_card_fail (FlashbulbCard *self, const gchar *answer)
 {
 	return FALSE;
+}
+
+static FlashbulbCardXmlParseData*
+flashbulb_card_xml_parse_data_new (void)
+{
+	FlashbulbCardXmlParseData *ret;
+
+	ret = g_malloc (sizeof (FlashbulbCardXmlParseData));
+	*ret = {
+		.card = g_object_new (FLASHBULB_TYPE_CARD);
+		.question_encountered = FALSE;
+		.answer_encountered = FALSE;
+	};
+
+	return ret;
+}
+
+static void
+flashbulb_card_from_xml_on_text (GMarkupParseContext *context,
+                                 const gchar         *text,
+                                 gsize                text_len,
+                                 gpointer             user_data,
+                                 GError             **error)
+{
+
+}
+
+static void
+flashbulb_card_from_xml_end_element (GMarkupParseContext *context,
+                                     const gchar         *element_name,
+                                     gpointer             user_data,
+                                     GError             **error)
+{
+
+}
+
+static const GMarkupParser flashbulb_card_xml_parser =
+{
+	.start_element = NULL;
+	.end_element = flashbulb_card_from_xml_end_element;
+	.text = flashbulb_card_from_xml_on_text;
+	.passthrough = NULL;
+	.error = NULL;
+};
+
+FlashbulbCard *
+flashbulb_card_from_xml (const gchar *xml_text, gssize text_len)
+{
+	FlashbulbCardXmlParseData *parse_data;
+	GMarkupParseContext       *context;
+	FlashbulbCard             *ret;
+	GError                    *error;
+
+	parse_data = flashbulb_card_xml_parse_data_new ();
+	context = g_markup_parse_context_new (&flashbulb_card_xml_parser,
+	                                      0,
+	                                      parse_data,
+	                                      NULL);
+	g_markup_parse_context_parse (context, xml_text, text_len, &error);
+	g_markup_parse_context_free (context);
+
+	ret = parse_data->card;
+	g_free (parse_data);
+	return ret;
 }

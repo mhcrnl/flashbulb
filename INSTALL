@@ -1,1 +1,11 @@
-/usr/share/automake-1.11/INSTALL
+Flashbulb can be built with three commands:
+
+$ autoreconf -i
+$ ./configure
+$ make
+
+To build in one command, run:
+autoreconf -i -m
+
+
+

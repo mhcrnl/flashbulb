@@ -1,0 +1,8 @@
+In flashbulb-card.c:
+	*) Possibly make FlashbulbCardXmlParseData a class
+	*) Possibly make the XML parser more modular:
+		- separate parsing from card construction
+		- provide functions to get the names of the elements
+		- while we're add it, develop separate functions to
+		  verify elements
+	*) Set errors if the document has unrecognized elements?

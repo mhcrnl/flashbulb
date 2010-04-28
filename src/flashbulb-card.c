@@ -23,6 +23,7 @@
 #include <glib-object.h>
 
 typedef struct _FlashbulbCardXmlParseData FlashbulbCardXmlParseData;
+/* TODO: possibly make this a full-fledged class */
 struct _FlashbulbCardXmlParseData
 {
 	FlashbulbCard *card;
@@ -228,42 +229,82 @@ flashbulb_card_xml_parse_data_new (void)
 	FlashbulbCardXmlParseData *ret;
 
 	ret = g_malloc (sizeof (FlashbulbCardXmlParseData));
-	*ret = {
-		.card = g_object_new (FLASHBULB_TYPE_CARD);
-		.question_encountered = FALSE;
-		.answer_encountered = FALSE;
-	};
+
+	ret->card = g_object_new (FLASHBULB_TYPE_CARD, NULL);
+	ret->question_encountered = FALSE;
+	ret->answer_encountered = FALSE;
 
 	return ret;
 }
 
-static void
-flashbulb_card_from_xml_on_text (GMarkupParseContext *context,
-                                 const gchar         *text,
-                                 gsize                text_len,
-                                 gpointer             user_data,
-                                 GError             **error)
+static gboolean
+flashbulb_card_is_valid_question_element (const GSList *element_stack)
 {
+	return ((g_slist_length ((GSList *) element_stack) == 2) &&
+	        !g_strcmp0 (element_stack->next->data, "flashcard") &&
+	        !g_strcmp0 (element_stack->data, "question"));
+}
 
+static gboolean
+flashbulb_card_is_valid_answer_element (const GSList *element_stack)
+{
+	return ((g_slist_length ((GSList *) element_stack) == 2) &&
+	        !g_strcmp0 (element_stack->next->data, "flashcard") &&
+	        !g_strcmp0 (element_stack->data, "answer"));
 }
 
 static void
-flashbulb_card_from_xml_end_element (GMarkupParseContext *context,
-                                     const gchar         *element_name,
-                                     gpointer             user_data,
-                                     GError             **error)
+flashbulb_card_from_xml_start_element (GMarkupParseContext *context,
+                                       const gchar         *element_name,
+                                       const gchar        **attribute_names,
+                                       const gchar        **attribute_values,
+                                       gpointer             user_data,
+                                       GError             **error)
 {
+	const GSList              *element_stack;
+	FlashbulbCardXmlParseData *data;
 
+	data = (FlashbulbCardXmlParseData *) user_data;
+	element_stack = g_markup_parse_context_get_element_stack (context);
+	if (g_slist_length ((GSList *) element_stack) == 1 &&
+	    g_strcmp0 (element_stack->data, "flashcard")) {
+		/* TODO: set error */
+	} else if (flashbulb_card_is_valid_question_element (element_stack)) {
+		if (data->question_encountered) {
+			/* TODO: set error */
+		} else {
+			data->question_encountered = TRUE;
+		}
+	} else if (flashbulb_card_is_valid_answer_element (element_stack)) {
+		if (data->answer_encountered) {
+			/* TODO: set error */
+		} else {
+			data->question_encountered = TRUE;
+		}
+	}
 }
 
-static const GMarkupParser flashbulb_card_xml_parser =
+static void
+flashbulb_card_from_xml_text (GMarkupParseContext *context,
+                              const gchar         *text,
+                              gsize                text_len,
+                              gpointer             user_data,
+                              GError             **error)
 {
-	.start_element = NULL;
-	.end_element = flashbulb_card_from_xml_end_element;
-	.text = flashbulb_card_from_xml_on_text;
-	.passthrough = NULL;
-	.error = NULL;
-};
+	const GSList              *element_stack;
+	FlashbulbCardXmlParseData *data;
+
+	/* TODO: if FlashbulbCardXmlParseData becomes a class, make
+	   this use the "official" cast macro */
+	data = (FlashbulbCardXmlParseData *) user_data;
+	element_stack = g_markup_parse_context_get_element_stack (context);
+
+	if (flashbulb_card_is_valid_question_element (element_stack)) {
+		g_object_set (data->card, "question", text, NULL);
+	} else if (flashbulb_card_is_valid_answer_element (element_stack)) {
+		g_object_set (data->card, "answer", text, NULL);
+	}
+}
 
 FlashbulbCard *
 flashbulb_card_from_xml (const gchar *xml_text, gssize text_len)
@@ -272,6 +313,13 @@ flashbulb_card_from_xml (const gchar *xml_text, gssize text_len)
 	GMarkupParseContext       *context;
 	FlashbulbCard             *ret;
 	GError                    *error;
+	static const GMarkupParser flashbulb_card_xml_parser = {
+		.start_element = flashbulb_card_from_xml_start_element,
+		.end_element = NULL,
+		.text = flashbulb_card_from_xml_text,
+		.passthrough = NULL,
+		.error = NULL
+	};
 
 	parse_data = flashbulb_card_xml_parse_data_new ();
 	context = g_markup_parse_context_new (&flashbulb_card_xml_parser,
@@ -282,6 +330,7 @@ flashbulb_card_from_xml (const gchar *xml_text, gssize text_len)
 	g_markup_parse_context_free (context);
 
 	ret = parse_data->card;
+	/* TODO: possibly add a function for freeing parse data */
 	g_free (parse_data);
 	return ret;
 }

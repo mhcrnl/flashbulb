@@ -62,26 +62,27 @@ struct _FlashbulbCard
 	GObject parent_instance;
 };
 
-FlashbulbCard* flashbulb_card_from_xml (const gchar *xml_text,
-                                        gssize text_len) G_GNUC_MALLOC;
+FlashbulbCard *flashbulb_card_from_xml     (const gchar         *xml_text,
+                                            gssize               text_len) G_GNUC_MALLOC;
 
-GType    flashbulb_card_get_type     (void) G_GNUC_CONST;
-void     flashbulb_card_get_question (const FlashbulbCard *self,
-                                      GValue              *value);
-void     flashbulb_card_get_answer   (const FlashbulbCard *self,
-                                      GValue              *value);
-void     flashbulb_card_set_question (FlashbulbCard       *self,
-                                      const GValue        *value);
-void     flashbulb_card_set_answer   (FlashbulbCard       *self,
-                                      const GValue        *value);
-gboolean flashbulb_card_is_correct   (const FlashbulbCard *self,
-                                      const gchar         *answer) G_GNUC_CONST;
-gboolean flashbulb_card_test         (FlashbulbCard       *self,
-                                      const gchar         *answer);
-gboolean flashbulb_card_succeed      (FlashbulbCard       *self,
-                                      const gchar         *answer);
-gboolean flashbulb_card_fail         (FlashbulbCard       *self,
-                                      const gchar         *answer);
+GType          flashbulb_card_get_type     (void) G_GNUC_CONST;
+
+void           flashbulb_card_get_question (const FlashbulbCard *self,
+                                            GValue              *value);
+void           flashbulb_card_get_answer   (const FlashbulbCard *self,
+                                            GValue              *value);
+void           flashbulb_card_set_question (FlashbulbCard       *self,
+                                            const GValue        *value);
+void           flashbulb_card_set_answer   (FlashbulbCard       *self,
+                                            const GValue        *value);
+gboolean       flashbulb_card_is_correct   (const FlashbulbCard *self,
+                                            const gchar         *answer) G_GNUC_CONST;
+gboolean       flashbulb_card_test         (FlashbulbCard       *self,
+                                            const gchar         *answer);
+gboolean       flashbulb_card_succeed      (FlashbulbCard       *self,
+                                            const gchar         *answer);
+gboolean       flashbulb_card_fail         (FlashbulbCard       *self,
+                                            const gchar         *answer);
 
 G_END_DECLS
 
